@@ -15,21 +15,21 @@ const renderCloud = function (ctx, x, y, color) {
   ctx.fillRect(x, y, CLOUD_WIDTH, CLOUD_HEIGHT);
 };
 
-const getMaxElement = function (arr) {
-  let maxElement = arr[0];
+const getMaxElement = function (times) {
+  let maxElement = times[0];
 
-  for (let i = 1; i < arr.length; i++) {
-    if (arr[i] > maxElement) {
-      maxElement = arr[i];
+  for (let i = 1; i < times.length; i++) {
+    if (times[i] > maxElement) {
+      maxElement = times[i];
     }
   }
 
   return maxElement;
 };
 
-function randomHSL() {
+const getRandomHSL = function () {
   return `hsl(240, ` + Math.floor(Math.random() * 100) + `%, 50%)`;
-}
+};
 
 window.renderStatistics = function (ctx, names, times) {
   renderCloud(
@@ -72,11 +72,7 @@ window.renderStatistics = function (ctx, names, times) {
         CLOUD_HEIGHT - GAP * 2 - ((BAR_HEIGHT * times[i]) / maxTime) - FONT_HEIGHT
     );
 
-    if (names[i] === `Вы`) {
-      ctx.fillStyle = `rgba(255, 0, 0, 1)`;
-    } else {
-      ctx.fillStyle = randomHSL();
-    }
+    ctx.fillStyle = (names[i] === `Вы`) ? `rgba(255, 0, 0, 1)` : getRandomHSL();
 
     ctx.fillRect(
         CLOUD_X + BAR_WIDTH + (BAR_WIDTH + BAR_GAP) * i,
