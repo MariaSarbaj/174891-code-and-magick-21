@@ -92,7 +92,7 @@ const getRandomProperty = (items) => {
   return items[Math.floor(Math.random() * items.length)];
 };
 
-const onSetupPlayerClick = function (evt) {
+const onSetupPlayerClick = (evt) => {
   const userTarget = evt.target;
   if (userTarget === wizardCoat) {
     wizardCoat.style.fill = getRandomProperty(WIZARD_COATS);
@@ -103,48 +103,48 @@ const onSetupPlayerClick = function (evt) {
   }
 };
 
-const onPopupEscPress = function (evt) {
+const onPopupEscPress = (evt) => {
   if (evt.key === `Escape` && evt.target !== userNameInput) {
     evt.preventDefault();
     closePopup();
   }
 };
 
-const openPopup = function () {
+const openPopup = () => {
   setup.classList.remove(`hidden`);
 
   document.addEventListener(`keydown`, onPopupEscPress);
   setupPlayer.addEventListener(`click`, onSetupPlayerClick);
 };
 
-const closePopup = function () {
+const closePopup = () => {
   setup.classList.add(`hidden`);
 
   document.removeEventListener(`keydown`, onPopupEscPress);
   setupPlayer.removeEventListener(`click`, onSetupPlayerClick);
 };
 
-setupOpen.addEventListener(`click`, function () {
+setupOpen.addEventListener(`click`, () => {
   openPopup();
 });
 
-setupOpen.addEventListener(`keydown`, function (evt) {
+setupOpen.addEventListener(`keydown`, (evt) => {
   if (evt.key === `Enter`) {
     openPopup();
   }
 });
 
-setupClose.addEventListener(`click`, function () {
+setupClose.addEventListener(`click`, () => {
   closePopup();
 });
 
-setupClose.addEventListener(`keydown`, function (evt) {
+setupClose.addEventListener(`keydown`, (evt) => {
   if (evt.key === `Enter`) {
     closePopup();
   }
 });
 
-userNameInput.addEventListener(`input`, function () {
+userNameInput.addEventListener(`input`, () => {
   const valueLength = userNameInput.value.length;
 
   if (valueLength < MIN_NAME_LENGTH) {
