@@ -312,7 +312,7 @@ window.Game = (function () {
     level: INITIAL_LEVEL,
 
     /** @param {boolean} deactivated */
-    setDeactivated: function (deactivated) {
+    setDeactivated(deactivated) {
       if (this._deactivated === deactivated) {
         return;
       }
@@ -331,7 +331,7 @@ window.Game = (function () {
      * и время проведенное на уровне и в игре.
      * @return {Object}
      */
-    getInitialState: function () {
+    getInitialState() {
       return {
         // Статус игры. Если CONTINUE, то игра продолжается.
         currentStatus: Verdict.CONTINUE,
@@ -366,7 +366,7 @@ window.Game = (function () {
      * Начальные проверки и запуск текущего уровня.
      * @param {boolean=} restart
      */
-    initializeLevelAndStart: function (restart) {
+    initializeLevelAndStart(restart) {
       restart = typeof restart === `undefined` ? true : restart;
 
       if (restart || !this.state) {
@@ -405,7 +405,7 @@ window.Game = (function () {
      * Временная остановка игры.
      * @param {Verdict=} verdict
      */
-    pauseLevel: function (verdict) {
+    pauseLevel(verdict) {
       if (verdict) {
         this.state.currentStatus = verdict;
       }
@@ -425,7 +425,7 @@ window.Game = (function () {
      * @private
      * @private
      */
-    _pauseListener: function (evt) {
+    _pauseListener(evt) {
       if (evt.keyCode === 32 && !this._deactivated) {
         evt.preventDefault();
         let needToRestartTheGame = this.state.currentStatus === Verdict.WIN ||
@@ -439,7 +439,7 @@ window.Game = (function () {
     /**
      * Отрисовка экрана паузы.
      */
-    _drawPauseScreen: function () {
+    _drawPauseScreen() {
       let message;
       switch (this.state.currentStatus) {
         case Verdict.WIN:
@@ -467,7 +467,7 @@ window.Game = (function () {
       this._drawMessage(message);
     },
 
-    _generateStatistics: function (time) {
+    _generateStatistics(time) {
       const generationIntervalSec = 3000;
       const minTimeInSec = 1000;
 
@@ -487,7 +487,7 @@ window.Game = (function () {
       return statistic;
     },
 
-    _shuffleArray: function (array) {
+    _shuffleArray(array) {
       for (let i = array.length - 1; i > 0; i--) {
         let j = Math.floor(Math.random() * (i + 1));
         let temp = array[i];
@@ -497,7 +497,7 @@ window.Game = (function () {
       return array;
     },
 
-    _drawMessage: function (message) {
+    _drawMessage(message) {
       let ctx = this.ctx;
 
       let drawCloud = function (x, y, width, heigth) {
@@ -535,7 +535,7 @@ window.Game = (function () {
      * @param {function} callback
      * @private
      */
-    _preloadImagesForLevel: function (callback) {
+    _preloadImagesForLevel(callback) {
       if (typeof this._imagesArePreloaded === `undefined`) {
         this._imagesArePreloaded = [];
       }
@@ -573,7 +573,7 @@ window.Game = (function () {
      * должны исчезнуть.
      * @param {number} delta Время, прошеднее с отрисовки прошлого кадра.
      */
-    updateObjects: function (delta) {
+    updateObjects(delta) {
       // Персонаж.
       let me = this.state.objects.filter(function (object) {
         return object.type === ObjectType.ME;
@@ -615,7 +615,7 @@ window.Game = (function () {
     /**
      * Проверка статуса текущего уровня.
      */
-    checkStatus: function () {
+    checkStatus() {
       // Нет нужны запускать проверку, нужно ли останавливать уровень, если
       // заранее известно, что да.
       if (this.state.currentStatus !== Verdict.CONTINUE) {
@@ -687,7 +687,7 @@ window.Game = (function () {
      * экран.
      * @param {Verdict} status
      */
-    setGameStatus: function (status) {
+    setGameStatus(status) {
       if (this.state.currentStatus !== status) {
         this.state.currentStatus = status;
       }
@@ -696,7 +696,7 @@ window.Game = (function () {
     /**
      * Отрисовка всех объектов на экране.
      */
-    render: function () {
+    render() {
       // Удаление всех отрисованных на странице элементов.
       this.ctx.clearRect(0, 0, WIDTH, HEIGHT);
 
@@ -717,7 +717,7 @@ window.Game = (function () {
      * проверку текущего раунда. Рекурсивно продолжается до тех пор, пока
      * проверка не вернет состояние FAIL, WIN или PAUSE.
      */
-    update: function () {
+    update() {
       if (!this.state.lastUpdated) {
         this.state.lastUpdated = Date.now();
       }
@@ -748,7 +748,7 @@ window.Game = (function () {
      * @param {KeyboardEvent} evt [description]
      * @private
      */
-    _onKeyDown: function (evt) {
+    _onKeyDown(evt) {
       switch (evt.keyCode) {
         case 37:
           this.state.keysPressed.LEFT = true;
@@ -773,7 +773,7 @@ window.Game = (function () {
      * @param {KeyboardEvent} evt [description]
      * @private
      */
-    _onKeyUp: function (evt) {
+    _onKeyUp(evt) {
       switch (evt.keyCode) {
         case 37:
           this.state.keysPressed.LEFT = false;
@@ -795,13 +795,13 @@ window.Game = (function () {
     },
 
     /** @private */
-    _initializeGameListeners: function () {
+    _initializeGameListeners() {
       window.addEventListener(`keydown`, this._onKeyDown);
       window.addEventListener(`keyup`, this._onKeyUp);
     },
 
     /** @private */
-    _removeGameListeners: function () {
+    _removeGameListeners() {
       window.removeEventListener(`keydown`, this._onKeyDown);
       window.removeEventListener(`keyup`, this._onKeyUp);
     }
