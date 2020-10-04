@@ -11,6 +11,10 @@ const WIZARD_FIREBALLS = [`#ee4830`, `#30a8ee`, `#5ce6c0`, `#e848d5`, `#e6e848`]
 const MIN_NAME_LENGTH = 2;
 const MAX_NAME_LENGTH = 25;
 
+const ENTER_BUTTON = `Enter`;
+const ESCAPE_BUTTON = `Escape`;
+
+
 // Create Wizards
 
 const userDialog = document.querySelector(`.setup`);
@@ -88,39 +92,45 @@ const wizardEyes = setupPlayer.querySelector(`.wizard-eyes`);
 const wizardFireballWrap = setupPlayer.querySelector(`.setup-fireball-wrap`);
 const wizardFireball = setupPlayer.querySelector(`.setup-fireball`);
 
-const getRandomProperty = (items) => {
+const getRandomArrayItem = (items) => {
   return items[Math.floor(Math.random() * items.length)];
 };
 
 const onSetupPlayerClick = (evt) => {
   const userTarget = evt.target;
   if (userTarget === wizardCoat) {
-    wizardCoat.style.fill = getRandomProperty(WIZARD_COATS);
+    wizardCoat.style.fill = getRandomArrayItem(WIZARD_COATS);
   } else if (userTarget === wizardEyes) {
-    wizardEyes.style.fill = getRandomProperty(WIZARD_EYES);
+    wizardEyes.style.fill = getRandomArrayItem(WIZARD_EYES);
   } else if (userTarget === wizardFireball) {
-    wizardFireballWrap.style.background = getRandomProperty(WIZARD_FIREBALLS);
+    wizardFireballWrap.style.background = getRandomArrayItem(WIZARD_FIREBALLS);
   }
 };
 
-const onPopupEscPress = (evt) => {
-  if (evt.key === `Escape` && evt.target !== userNameInput) {
+const onEscKeydown = (evt) => {
+  if (evt.key === ESCAPE_BUTTON && evt.target !== userNameInput) {
     evt.preventDefault();
     closePopup();
+  }
+};
+
+const onEnterKeydown = (evt, action) => {
+  if (evt.key === ENTER_BUTTON) {
+    action();
   }
 };
 
 const openPopup = () => {
   setup.classList.remove(`hidden`);
 
-  document.addEventListener(`keydown`, onPopupEscPress);
+  document.addEventListener(`keydown`, onEscKeydown);
   setupPlayer.addEventListener(`click`, onSetupPlayerClick);
 };
 
 const closePopup = () => {
   setup.classList.add(`hidden`);
 
-  document.removeEventListener(`keydown`, onPopupEscPress);
+  document.removeEventListener(`keydown`, onEscKeydown);
   setupPlayer.removeEventListener(`click`, onSetupPlayerClick);
 };
 
@@ -129,9 +139,7 @@ setupOpen.addEventListener(`click`, () => {
 });
 
 setupOpen.addEventListener(`keydown`, (evt) => {
-  if (evt.key === `Enter`) {
-    openPopup();
-  }
+  onEnterKeydown(evt, openPopup);
 });
 
 setupClose.addEventListener(`click`, () => {
@@ -139,18 +147,16 @@ setupClose.addEventListener(`click`, () => {
 });
 
 setupClose.addEventListener(`keydown`, (evt) => {
-  if (evt.key === `Enter`) {
-    closePopup();
-  }
+  onEnterKeydown(evt, closePopup);
 });
 
 userNameInput.addEventListener(`input`, () => {
   const valueLength = userNameInput.value.length;
 
   if (valueLength < MIN_NAME_LENGTH) {
-    userNameInput.setCustomValidity(`Ещё ` + (MIN_NAME_LENGTH - valueLength) + ` симв.`);
+    userNameInput.setCustomValidity(`Ещё ${MIN_NAME_LENGTH - valueLength} симв.`);
   } else if (valueLength > MAX_NAME_LENGTH) {
-    userNameInput.setCustomValidity(`Удалите лишние ` + (valueLength - MAX_NAME_LENGTH) + ` симв.`);
+    userNameInput.setCustomValidity(`Удалите лишние ${valueLength - MAX_NAME_LENGTH} симв.`);
   } else {
     userNameInput.setCustomValidity(``);
   }
